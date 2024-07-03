@@ -27,6 +27,7 @@ Here're some of the project's best features:
 *   Look up for videos
 *   Play it via YouTube Embed
 *   History system
+*   Discord RPC
 *   Not claiming 100% of your ressources
 
 Here're some of the project's <i>worst</i> features:
