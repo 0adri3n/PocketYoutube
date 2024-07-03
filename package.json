@@ -9,9 +9,11 @@
   "author": "0adri3n",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^31.1.0"
+    "electron": "^31.1.0",
+    "electron-packager": "^17.1.2"
   },
   "dependencies": {
+    "discord-rpc": "^4.0.1",
     "miniget": "^3.0.0",
     "scrape-youtube": "^2.4.0",
     "video.js": "^8.12.0",

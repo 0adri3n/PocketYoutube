@@ -194,6 +194,9 @@
         </div>
     </div>
     <script>
+
+        window.ipcRender.send("change-rpc", "reset")
+
         function getResults() {
             const query = document.getElementById('search-input').value;
             if (query) {
@@ -254,7 +257,7 @@
                     <div class="video-content">
                         <h3>${video.title}</h3>
                         <p>${video.description}</p>
-                        <p><a href="#" class="watch-link" data-video-id="${video.id}">Watch on PocketYoutube</a></p>
+                        <p><a href="#" class="watch-link" data-video-id="${video.id}" data-video-title="${video.title}">Watch on PocketYoutube</a></p>
                     </div>
                 `;
                 resultsContainer.appendChild(videoElement);
@@ -266,6 +269,7 @@
                     event.preventDefault();
                     const videoId = link.getAttribute('data-video-id');
                     openPopup(videoId);
+                    window.ipcRender.send("change-rpc", link.getAttribute("data-video-title"))
                 });
             });
         }
@@ -283,6 +287,7 @@
             const popupPlayer = document.getElementById('popup-player');
             popupPlayer.src = '';
             popupContainer.style.display = 'none';
+            window.ipcRender.send("change-rpc", "reset")
         });
     </script>
 </body>

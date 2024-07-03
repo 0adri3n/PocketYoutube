@@ -3,7 +3,7 @@ const { youtube } = require("scrape-youtube");
 const path = require("path");
 const url = require("url");
 const fs = require("fs");
-
+const DiscordRPC = require("discord-rpc");
 
 let win;
 
@@ -46,7 +46,6 @@ ipcMain.on("add-history", async (event, search) => {
 
   const historyFilePath = path.join(__dirname, "cache/history.log");
 
-  // Lire le fichier history.log pour vérifier si la recherche existe déjà
   let historyList = [];
   try {
     const data = fs.readFileSync(historyFilePath, "utf-8");
@@ -55,11 +54,9 @@ ipcMain.on("add-history", async (event, search) => {
     console.error("Error reading history.log:", error);
   }
 
-  // Vérifier si la recherche existe déjà dans l'historique
   if (!historyList.includes(search)) {
     const historyItem = search + "\n";
 
-    // Écriture dans le fichier history.log si la recherche n'existe pas déjà
     fs.appendFile(historyFilePath, historyItem, (err) => {
       if (err) {
         console.error("Error writing to history.log:", err);
@@ -73,7 +70,6 @@ ipcMain.on("add-history", async (event, search) => {
 });
 
 ipcMain.handle("get-history", async (event) => {
-
   console.log("API called 🤖 | Route : get-history");
 
   const historyFilePath = path.join(__dirname, "cache/history.log");
@@ -98,16 +94,89 @@ ipcMain.handle("delete-history", async (event, search) => {
     const data = fs.readFileSync(historyFilePath, "utf-8");
     let historyList = data.split("\n").filter((line) => line.trim() !== "");
 
-    // Supprimer la recherche spécifique de l'historique
     historyList = historyList.filter((item) => item !== search);
 
-    // Réécrire le fichier history.log avec la recherche supprimée
     fs.writeFileSync(historyFilePath, historyList.join("\n"));
     console.log("Search history deleted from history.log");
   } catch (error) {
     console.error("Error deleting from history.log:", error);
   }
 });
+
+ipcMain.on("change-rpc", async (event, videoTitle) => {
+
+  console.log("API called 🤖 | Route : change-rpc");
+
+    setActivity(videoTitle)
+
+});
+
+const clientId = "1258172335282851933";
+
+const rpc = new DiscordRPC.Client({ transport: "ipc" });
+DiscordRPC.register(clientId);
+
+const startTimestamp = new Date();
+
+
+rpc.on("ready", () => {
+    setActivity("reset");
+});
+
+rpc.login({ clientId }).catch(console.error);
+
+function startActivity() {
+
+    const clientId = "1258172335282851933";
+
+    DiscordRPC.register(clientId);
+    rpc = new DiscordRPC.Client({ transport: "ipc" });
+
+    rpc.on("ready", () => {
+        console.log("Discord RPC connected!");
+        setActivity("reset");
+        setInterval(() => {
+        setActivity("reset");
+        }, 15e3);
+    });
+
+    rpc.login({ clientId }).catch((err) => {
+        console.error("Error logging into Discord RPC:", err);
+    });
+
+
+}
+
+
+async function setActivity(videoTitle) {
+  if (!rpc || !win) {
+    return;
+  }
+
+  if(videoTitle == "reset"){
+        rpc.setActivity({
+        details: "Crawling through PocketYoutube",
+        largeImageKey: "pocket",
+        largeImageText: "PocketYoutube",
+        instance: false,
+        startTimestamp,
+        });
+    }
+    else{
+        const startTimestamp = new Date();
+        rpc.setActivity({
+        details: "Watching a video on PocketYoutube",
+        state: videoTitle,
+        startTimestamp,
+        largeImageKey: "pocket",
+        largeImageText: "PocketYoutube",
+        instance: false,
+        });
+    }
+}
+
+
+
 
 // Window Part
 app.on("ready", createWindow);
