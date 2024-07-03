@@ -1,0 +1,25 @@
+{
+  "name": "pocketyoutube",
+  "version": "1.0.0",
+  "description": "a pocket youtube sofwater",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "0adri3n",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.1.0"
+  },
+  "dependencies": {
+    "miniget": "^3.0.0",
+    "scrape-youtube": "^2.4.0",
+    "video.js": "^8.12.0",
+    "youtube-dl-exec": "^3.0.6",
+    "youtube-mp3-converter": "^1.0.3",
+    "youtube-mp3-downloader": "^0.7.11",
+    "ytdl-core": "^4.11.5",
+    "ytdl-mp3": "^4.0.0",
+    "ytmp3dl-core": "^0.0.40"
+  }
+}
