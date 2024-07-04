@@ -19,6 +19,11 @@ So I thought about a light Electron app playing YouTube videos via embed 🕺
 
 ![image](https://github.com/0adri3n/PocketYoutube/assets/62818208/d4234941-0139-4d56-b3c9-8c73bf95221b)
 
+![image](https://github.com/0adri3n/PocketYoutube/assets/62818208/d9f084d9-80c0-44c5-a558-e4d51db09014)
+
+![image](https://github.com/0adri3n/PocketYoutube/assets/62818208/55f7aaf3-eaab-4e91-933f-c642d1e0da0d)
+
+
 
 <h2>🧐 Features</h2>
 
@@ -27,7 +32,9 @@ Here're some of the project's best features:
 *   Look up for videos
 *   Play it via YouTube Embed
 *   History system
+*   Like System
 *   Discord RPC
+*   Settings Window
 *   Not claiming 100% of your ressources
 
 Here're some of the project's <i>worst</i> features:
