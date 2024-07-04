@@ -56,7 +56,15 @@ npm start
 ```
 
 <p>3. That's it !</p>
-  
+
+<h2>🐧 Oh, you're using Linux ? Gotchu :</h2>
+
+PocketYoutube is avalaible on the snap store.
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/pocketyoutube)
+
+[![pocketyoutube](https://snapcraft.io/pocketyoutube/badge.svg)](https://snapcraft.io/pocketyoutube)
+
   
 <h2>💻 Built with</h2>
 
