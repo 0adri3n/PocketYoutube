@@ -23,8 +23,14 @@
             justify-content: center;
             align-items: center;
         }
+
+        #logo {
+            max-width: 40px; /* Ajustez cette valeur en fonction de la taille souhaitée pour le logo */
+            margin-right: 10px;
+        }
+
         #search-input {
-            width: 70%;
+            width: 60%;
             padding: 10px;
             font-size: 16px;
             border: none;
@@ -34,7 +40,10 @@
             font-family: 'Consolas', monospace;
             background-color: white !important;
         }
-        #search-button {
+
+        #search-button,
+        #settings-button,
+        #liked-videos-button {
             padding: 10px 15px;
             font-size: 16px;
             background-color: #6a0dad; /* Mauve */
@@ -43,10 +52,14 @@
             border-radius: 5px;
             cursor: pointer;
             font-family: 'Consolas', monospace;
+            margin-left: 10px;
         }
-        #search-button:hover {
+
+        #search-button:hover,
+        #liked-videos-button:hover {
             background-color: #8a2be2; /* Mauve clair */
         }
+
         #results {
             flex: 1;
             padding: 20px;
@@ -170,16 +183,129 @@
             margin-top: 20px;
         }
 
+        .like-button,
+        .unlike-button {
+            background-color: #ff4500; /* Orange pour le bouton like */
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-family: 'Consolas', monospace;
+            margin-left: 10px;
+        }
+
+        .like-button{
+            background-color: green;
+        }
+
+        .like-button:hover{
+            background-color: rgb(0, 161, 0);
+            transition: 0.3s;
+        }
+
+        .unlike-button:hover {
+            background-color: #ff6347; /* Rouge clair */
+                transition: 0.3s;
+        }
+
+        #settings-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content-settings {
+            position: relative;
+            background-color: #333333; /* Dark gray background */
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            max-width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column; /* Affichage des options de haut en bas */
+            justify-content: flex-start; /* Alignement en haut */
+            align-items: center;
+        }
+
+        .popup-content-settings h2 {
+            color: #ffffff; /* White text color */
+            margin-bottom: 20px;
+            align-self: flex-start; /* Alignement à gauche */
+        }
+
+        .popup-content-settings label {
+            color: #ffffff; /* White text color */
+            display: block;
+            text-align: left;
+            margin-bottom: 10px;
+            width: 100%; /* Pleine largeur pour le label */
+        }
+
+        .popup-content-settings button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #6a0dad; /* Purple */
+            color: #ffffff; /* White text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Consolas', monospace;
+            margin-top: 10px;
+            width: 100%; /* Pleine largeur pour le bouton */
+        }
+
+        .popup-content-settings button:hover {
+            background-color: #8a2be2; /* Light purple */
+        }
+
+        #discord-rpc-checkbox {
+            margin-right: 10px;
+        }
+
+
+
+
     </style>
 </head>
 <body>
     <div id="search-bar">
-        <input type="text" id="search-input" placeholder="Search YouTube videos..." oninput="getHistory()" list="history-list">
+        <img src="../assets/pocket.png" alt="PocketYoutube Logo" id="logo">
+        <input type="text" id="search-input" placeholder="Search YouTube videos..." list="history-list">
         <datalist id="history-list">
-            <!-- Liste d'autocomplétion vide, mise à jour dynamiquement -->
         </datalist>
         <button id="search-button">Search</button>
+        <button id="liked-videos-button">Liked Videos</button>
+        <button id="settings-button">Settings</button>
+
     </div>
+
+    <div id="settings-panel">
+        <div class="popup-content-settings">
+            <h2>Settings</h2>
+            <div>
+                <label for="discord-rpc-checkbox">
+                    <input type="checkbox" id="discord-rpc-checkbox"> Enable Discord RPC
+                </label>
+            </div>
+            <div>
+                <button id="clear-history-button">Clear Search History</button>
+            </div>
+            <div>
+                <button class="close-settings-button" id="close-settings-button">Close</button>
+            </div>
+        </div>
+    </div>
+
+
 
     <div id="home-section">
         <img src="../assets/pocket.png" alt="PocketYoutube Logo">
@@ -194,40 +320,64 @@
         </div>
     </div>
     <script>
+    document.addEventListener("DOMContentLoaded", () => {
 
-        window.ipcRender.send("change-rpc", "reset")
+        const searchButton = document.getElementById('search-button');
+        const likedVideosButton = document.getElementById('liked-videos-button');
+        const settingsButton = document.getElementById('settings-button');
+        const searchInput = document.getElementById('search-input');
+        const closeButton = document.getElementById('close-button');
+        const settingsPanel = document.getElementById('settings-panel');
+        const clearHistoryButton = document.getElementById('clear-history-button');
+        const closeSettingsButton = document.getElementById('close-settings-button');
+        const discordRpcCheckbox = document.getElementById('discord-rpc-checkbox');
 
-        function getResults() {
-            const query = document.getElementById('search-input').value;
-            if (query) {
-                window.ipcRender.send("add-history", query);
-                window.ipcRender.invoke("get-results", query).then(
-                    (results) => {
-                        displayResults(results);
-                    }
-                );
-            }
+        searchButton.addEventListener('click', getResults);
+        likedVideosButton.addEventListener('click', getLikedVideos);
+        settingsButton.addEventListener('click', openSettingsPanel);
+        searchInput.addEventListener('keydown', handleSearchInputKeydown);
+        searchInput.addEventListener('keyup', handleSearchInputKeyup);
+        closeButton.addEventListener('click', closePopup);
+        discordRpcCheckbox.addEventListener('click', changeRpc);
+        clearHistoryButton.addEventListener('click', clearSearchHistory);
+        closeSettingsButton.addEventListener('click', closeSettingsPanel);
+
+        getHistory();
+
+        function openSettingsPanel() {
+            settingsPanel.style.display = 'flex';
+            loadSettings();
         }
 
-        function getHistory() {
-            window.ipcRender.invoke("get-history").then(
-                (results) => {
-                    const historyList = document.getElementById('history-list');
-                    historyList.innerHTML = '';
-                    results.forEach((item) => {
-                        const option = document.createElement('option');
-                        option.value = item;
-                        historyList.appendChild(option);
-                    });
-                }
-            );
+        function closeSettingsPanel() {
+            settingsPanel.style.display = 'none';
         }
 
-        document.getElementById('search-button').addEventListener('click', () => {
-            getResults();
-        });
+        function loadSettings() {
 
-        document.getElementById('search-input').addEventListener('keydown', (event) => {
+            window.ipcRender.invoke("check-discord-rpc").then(enabled => {
+                discordRpcCheckbox.checked = enabled;
+            });
+        }
+
+        function changeRpc() {
+            window.ipcRender.send("switch-rpc");
+            loadSettings();
+
+        }
+
+        function clearSearchHistory() {
+            window.ipcRender.send("clear-history");
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+        }
+
+        function handleSearchInputKeyup(event) {
+            timeout = setTimeout(getHistory, 300); 
+            clearTimeout(timeout);
+        }
+
+        function handleSearchInputKeydown(event) {
             const historyList = document.getElementById('history-list');
             const options = historyList.getElementsByTagName('option');
             if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -242,7 +392,27 @@
             } else if (event.key === 'Enter') {
                 getResults();
             }
-        });
+        }
+
+        function getResults() {
+            const query = document.getElementById('search-input').value;
+            if (query) {
+                window.ipcRender.send("add-history", query);
+                window.ipcRender.invoke("get-results", query).then(displayResults);
+            }
+        }
+
+        function getHistory() {
+            window.ipcRender.invoke("get-history").then(results => {
+                const historyList = document.getElementById('history-list');
+                historyList.innerHTML = '';
+                results.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    historyList.appendChild(option);
+                });
+            });
+        }
 
         function displayResults(results) {
             const homeSection = document.getElementById('home-section');
@@ -250,45 +420,108 @@
             const resultsContainer = document.getElementById('results');
             resultsContainer.innerHTML = '';
             results.forEach(video => {
+                try {
+                    video = JSON.parse(video);
+                } catch {
+                    console.log("No need to parse.");
+                }
                 const videoElement = document.createElement('div');
                 videoElement.classList.add('video');
-                videoElement.innerHTML = `
-                    <img src="${video.thumbnail}" alt="${video.title}">
-                    <div class="video-content">
-                        <h3>${video.title}</h3>
-                        <p>${video.description}</p>
-                        <p><a href="#" class="watch-link" data-video-id="${video.id}" data-video-title="${video.title}">Watch on PocketYoutube</a></p>
-                    </div>
-                `;
-                resultsContainer.appendChild(videoElement);
-            });
 
-            const watchLinks = document.querySelectorAll('.watch-link');
-            watchLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const videoId = link.getAttribute('data-video-id');
-                    openPopup(videoId);
-                    window.ipcRender.send("change-rpc", link.getAttribute("data-video-title"))
+                window.ipcRender.invoke("check-like", video).then(isLiked => {
+                    const buttonType = isLiked ? 'Unlike' : 'Like';
+                    const buttonClass = isLiked ? 'unlike-button' : 'like-button';
+
+                    videoElement.innerHTML = `
+                        <img src="${video.thumbnail}" alt="${video.title}">
+                        <div class="video-content">
+                            <h3>${video.title}</h3>
+                            <p>${video.description}</p>
+                            <p>
+                                <a href="#" class="watch-link" data-video-id="${video.id}" data-video-title="${video.title}">Watch on PocketYoutube</a>
+                                <button class="${buttonClass}" data-video-id="${video.id}" data-video-title="${video.title}" data-video-thumbnail="${video.thumbnail}" data-video-desc="${video.description}">${buttonType}</button>
+                            </p>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(videoElement);
+
+                    const watchLinks = videoElement.querySelectorAll('.watch-link');
+                    watchLinks.forEach(link => {
+                        link.addEventListener('click', handleWatchLinkClick);
+                    });
+
+                    const likeButton = videoElement.querySelector('.like-button');
+                    const unlikeButton = videoElement.querySelector('.unlike-button');
+
+                    if (likeButton) {
+                        likeButton.addEventListener('click', handleLikeButtonClick);
+                    }
+
+                    if (unlikeButton) {
+                        unlikeButton.addEventListener('click', handleUnlikeButtonClick);
+                    }
                 });
             });
+            getHistory();
+        }
+
+        function getLikedVideos() {
+            document.getElementById('search-input').value = "";
+            window.ipcRender.invoke("get-likes").then(displayResults);
         }
 
         function openPopup(videoId) {
             const popupContainer = document.getElementById('popup-container');
-            const popupContent = document.getElementById('popup-content');
             const popupPlayer = document.getElementById('popup-player');
             popupPlayer.src = `https://www.youtube.com/embed/${videoId}`;
             popupContainer.style.display = 'flex';
+            window.ipcRender.send("change-rpc", videoId);
         }
 
-        document.getElementById('close-button').addEventListener('click', () => {
+        function closePopup() {
             const popupContainer = document.getElementById('popup-container');
             const popupPlayer = document.getElementById('popup-player');
             popupPlayer.src = '';
             popupContainer.style.display = 'none';
-            window.ipcRender.send("change-rpc", "reset")
-        });
+            window.ipcRender.send("change-rpc", "reset");
+        }
+
+        function handleWatchLinkClick(event) {
+            event.preventDefault();
+            const videoId = this.getAttribute('data-video-id');
+            openPopup(videoId);
+            window.ipcRender.send("change-rpc", this.getAttribute("data-video-title"));
+        }
+
+        function handleLikeButtonClick(event) {
+            event.preventDefault();
+            const videoId = this.getAttribute('data-video-id');
+            const videoTitle = this.getAttribute('data-video-title');
+            const videoThumbnail = this.getAttribute('data-video-thumbnail');
+            const videoDesc = this.getAttribute('data-video-desc');
+            window.ipcRender.send("like-video", { id: videoId, title: videoTitle, thumbnail: videoThumbnail, description: videoDesc });
+            this.textContent = 'Unlike';
+            this.classList.remove('like-button');
+            this.classList.add('unlike-button');
+            if (likes) {
+                getLikedVideos();
+            }
+        }
+
+        function handleUnlikeButtonClick(event) {
+            event.preventDefault();
+            const videoId = this.getAttribute('data-video-id');
+            window.ipcRender.send("delete-like", videoId);
+            this.textContent = 'Like';
+            this.classList.remove('unlike-button');
+            this.classList.add('like-button');
+            if (likes) {
+                getLikedVideos();
+            }
+        }
+    });
+
     </script>
+
 </body>
 </html>

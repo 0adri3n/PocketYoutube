@@ -5,8 +5,8 @@ const ipcRenderer = require("electron").ipcRenderer;
 // White-listed channels.
 const ipc = {
   render: {
-    send: ["add-history", "change-rpc"],
-    sendReceive: ["get-results", "get-history", "delete-history"],
+    send: ["add-history", "change-rpc", "like-video", "delete-like", "clear-history", "switch-rpc"],
+    sendReceive: ["get-results", "get-history", "delete-history", "get-likes", "check-like", "check-discord-rpc"],
   },
 };
 

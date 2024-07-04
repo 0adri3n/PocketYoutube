@@ -4,6 +4,8 @@ const path = require("path");
 const url = require("url");
 const fs = require("fs");
 const DiscordRPC = require("discord-rpc");
+const yaml = require("js-yaml");
+const { disconnect } = require("process");
 
 let win;
 
@@ -103,11 +105,177 @@ ipcMain.handle("delete-history", async (event, search) => {
   }
 });
 
+
+ipcMain.on("clear-history", async (event) => {
+  console.log("API called 🤖 | Route : clear-history");
+
+  const historyFilePath = path.join(__dirname, "cache/history.log");
+
+  try {
+    const data = fs.readFileSync(historyFilePath, "utf-8");
+    let historyList = data.split("\n").filter((line) => line.trim() !== "");
+
+    fs.writeFileSync(historyFilePath, "");
+    console.log("Search history cleared from history.log");
+  } catch (error) {
+    console.error("Error clearing from history.log:", error);
+  }
+});
+
+
+ipcMain.on("like-video", async (event, video) => {
+  console.log("API called 🤖 | Route : like-video");
+
+  const likedVideosFilePath = path.join(__dirname, "cache/liked_videos.log");
+
+  let likedVideosList = [];
+  try {
+    const data = fs.readFileSync(likedVideosFilePath, "utf-8");
+    likedVideosList = data.split("\n").filter((line) => line.trim() !== "");
+  } catch (error) {
+    console.error("Error reading liked_videos.log:", error);
+  }
+
+  const videoData = JSON.stringify(video);
+
+  if (!likedVideosList.includes(videoData)) {
+    fs.appendFile(likedVideosFilePath, videoData + "\n", (err) => {
+      if (err) {
+        console.error("Error writing to liked_videos.log:", err);
+        return;
+      }
+      console.log("Video liked and added to liked_videos.log");
+    });
+  } else {
+    console.log("Video already liked and present in liked_videos.log");
+  }
+});
+
+ipcMain.handle("get-likes", async (event) => {
+  console.log("API called 🤖 | Route : get-likes");
+
+  const likesFilePath = path.join(__dirname, "cache/liked_videos.log");
+
+  try {
+    const data = fs.readFileSync(likesFilePath, "utf-8");
+    const likesList = data.split("\n").filter((line) => line.trim() !== "");
+    return likesList;
+  } catch (error) {
+    console.error("Error reading liked_videos.log:", error);
+    return [];
+  }
+});
+
+ipcMain.handle("check-like", async (event, video) => {
+  console.log("API called 🤖 | Route : check-like");
+
+  const likedVideosFilePath = path.join(__dirname, "cache/liked_videos.log");
+
+  let likedVideosList = [];
+  try {
+    const data = fs.readFileSync(likedVideosFilePath, "utf-8");
+    likedVideosList = data.split("\n").filter((line) => line.trim() !== "");
+  } catch (error) {
+    console.error("Error reading liked_videos.log:", error);
+  }
+
+  const { id, title, thumbnail, description } = video;
+  const videoData = JSON.stringify({ id, title, thumbnail, description });
+
+  if (!likedVideosList.includes(videoData)) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+ipcMain.handle("check-discord-rpc", async (event) => {
+  console.log("API called 🤖 | Route : check-discord-rpc");
+
+  const configFile = path.join(__dirname, "config/config.yaml");
+
+  try {
+    const config = yaml.load(fs.readFileSync(configFile, "utf8"));
+
+    const discordRpcEnabled = config["discord-rpc"] === true;
+
+    return discordRpcEnabled;
+  } catch (error) {
+    console.error("Error reading config.yaml:", error);
+    return false; 
+  }
+});
+
+ipcMain.on("switch-rpc", async (event, newValue) => {
+  console.log("API called 🤖 | Route : change-rpc");
+
+  const configFile = path.join(__dirname, "config/config.yaml");
+
+  try {
+    // Charger le contenu du fichier config.yaml
+    const config = yaml.load(fs.readFileSync(configFile, "utf8"));
+
+    // Inverser la valeur de discord-rpc
+    config["discord-rpc"] = !config["discord-rpc"];
+
+    // Écrire les modifications dans le fichier config.yaml
+    fs.writeFileSync(configFile, yaml.dump(config));
+
+    // Retourner la nouvelle valeur de discord-rpc
+    return config["discord-rpc"];
+  } catch (error) {
+    console.error("Error reading or writing config.yaml:", error);
+    return false;
+  }
+});
+ipcMain.on("delete-like", async (event, videoId) => {
+
+  console.log("API called 🤖 | Route : delete-like");
+
+  const likedVideosFilePath = path.join(__dirname, "cache/liked_videos.log");
+
+  try {
+    const data = fs.readFileSync(likedVideosFilePath, "utf-8");
+    let likedVideosList = data.split("\n").filter((line) => line.trim() !== "");
+
+    likedVideosList = likedVideosList.filter((item) => {
+      try {
+        const video = JSON.parse(item);
+        return video.id !== videoId;
+      } catch (error) {
+        console.error("Error parsing line:", item, error);
+        return true; // Si une ligne ne peut pas être analysée, nous ne la supprimons pas
+      }
+    });
+
+    fs.writeFileSync(likedVideosFilePath, likedVideosList.join("\n"));
+    console.log("Like deleted from liked_videos.log");
+  } catch (error) {
+    console.error("Error deleting from liked_videos.log:", error);
+  }
+});
+
+
 ipcMain.on("change-rpc", async (event, videoTitle) => {
 
   console.log("API called 🤖 | Route : change-rpc");
 
-    setActivity(videoTitle)
+  const configFile = path.join(__dirname, "config/config.yaml");
+
+  try {
+    const config = yaml.load(fs.readFileSync(configFile, "utf8"));
+
+    var discordRpcEnabled = config["discord-rpc"] === true;
+  } catch (error) {
+    console.error("Error reading config.yaml:", error);
+    var discordRpcEnabled = false;
+  }
+
+  if (discordRpcEnabled) {
+      setActivity(videoTitle);
+
+  }
+
 
 });
 
@@ -118,33 +286,26 @@ DiscordRPC.register(clientId);
 
 const startTimestamp = new Date();
 
+const configFile = path.join(__dirname, "config/config.yaml");
 
-rpc.on("ready", () => {
+try {
+  const config = yaml.load(fs.readFileSync(configFile, "utf8"));
+
+  var discordRpcEnabled = config["discord-rpc"] === true;
+
+} catch (error) {
+  console.error("Error reading config.yaml:", error);
+  var discordRpcEnabled = false;
+}
+if(discordRpcEnabled){
+
+
+
+  rpc.on("ready", () => {
     setActivity("reset");
-});
+  });
 
-rpc.login({ clientId }).catch(console.error);
-
-function startActivity() {
-
-    const clientId = "1258172335282851933";
-
-    DiscordRPC.register(clientId);
-    rpc = new DiscordRPC.Client({ transport: "ipc" });
-
-    rpc.on("ready", () => {
-        console.log("Discord RPC connected!");
-        setActivity("reset");
-        setInterval(() => {
-        setActivity("reset");
-        }, 15e3);
-    });
-
-    rpc.login({ clientId }).catch((err) => {
-        console.error("Error logging into Discord RPC:", err);
-    });
-
-
+  rpc.login({ clientId }).catch(console.error);
 }
 
 
@@ -153,29 +314,29 @@ async function setActivity(videoTitle) {
     return;
   }
 
-  if(videoTitle == "reset"){
-        rpc.setActivity({
-        details: "Crawling through PocketYoutube",
-        largeImageKey: "pocket",
-        largeImageText: "PocketYoutube",
-        instance: false,
-        startTimestamp,
-        });
-    }
-    else{
-        const startTimestamp = new Date();
-        rpc.setActivity({
-        details: "Watching a video on PocketYoutube",
-        state: videoTitle,
-        startTimestamp,
-        largeImageKey: "pocket",
-        largeImageText: "PocketYoutube",
-        instance: false,
-        });
-    }
+
+  if (videoTitle == "reset") {
+    rpc.setActivity({
+      details: "Crawling through PocketYoutube",
+      largeImageKey: "pocket",
+      largeImageText: "PocketYoutube",
+      instance: false,
+      startTimestamp,
+    });
+  } else {
+    const startTimestamp = new Date();
+    rpc.setActivity({
+      details: "Watching a video on PocketYoutube",
+      state: videoTitle,
+      startTimestamp,
+      largeImageKey: "pocket",
+      largeImageText: "PocketYoutube",
+      instance: false,
+    });
+  }
+
+
 }
-
-
 
 
 // Window Part
@@ -184,6 +345,7 @@ app.on("ready", createWindow);
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
+    rpc.destroy();
   }
 });
 
