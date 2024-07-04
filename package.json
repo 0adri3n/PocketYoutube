@@ -4,13 +4,15 @@
   "description": "a pocket youtube sofwater",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder --linux snap"
   },
   "author": "0adri3n",
   "license": "ISC",
   "devDependencies": {
     "electron": "^31.1.0",
-    "electron-packager": "^17.1.2"
+    "electron-packager": "^17.1.2",
+    "electron-builder": "^24.13.3"
   },
   "dependencies": {
     "discord-rpc": "^4.0.1",
