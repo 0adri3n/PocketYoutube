@@ -1,12 +1,18 @@
 {
   "name": "pocketyoutube",
-  "version": "1.0.0",
-  "description": "a pocket youtube sofwater",
+  "version": "1.2.0",
+  "description": "A minimalist YouTube navigator",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --linux snap"
   },
+  "keywords": [
+    "Youtube",
+    "Electron",
+    "Pocket"
+  ],
+  "repository": "https://github.com/0adri3n/PocketYoutube",
   "author": "0adri3n",
   "license": "ISC",
   "devDependencies": {
