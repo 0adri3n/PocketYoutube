@@ -5,7 +5,6 @@ const url = require("url");
 const fs = require("fs");
 const DiscordRPC = require("discord-rpc");
 const yaml = require("js-yaml");
-const { disconnect } = require("process");
 
 let win;
 
@@ -287,6 +286,7 @@ DiscordRPC.register(clientId);
 const startTimestamp = new Date();
 
 const configFile = path.join(__dirname, "config/config.yaml");
+
 
 try {
   const config = yaml.load(fs.readFileSync(configFile, "utf8"));

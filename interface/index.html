@@ -503,9 +503,6 @@
             this.textContent = 'Unlike';
             this.classList.remove('like-button');
             this.classList.add('unlike-button');
-            if (likes) {
-                getLikedVideos();
-            }
         }
 
         function handleUnlikeButtonClick(event) {
@@ -515,9 +512,6 @@
             this.textContent = 'Like';
             this.classList.remove('unlike-button');
             this.classList.add('like-button');
-            if (likes) {
-                getLikedVideos();
-            }
         }
     });
 
