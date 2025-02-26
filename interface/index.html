@@ -12,12 +12,12 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            background-color: #2c2c2c; /* Gris foncé */
-            color: #ffffff; /* Texte blanc pour le contraste */
+            background-color: #2c2c2c;
+            color: #ffffff;
         }
         #search-bar {
             padding: 10px;
-            background-color: #4b0082; /* Mauve foncé */
+            background-color: #4b0082;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
@@ -25,8 +25,12 @@
         }
 
         #logo {
-            max-width: 40px; /* Ajustez cette valeur en fonction de la taille souhaitée pour le logo */
+            max-width: 40px;
             margin-right: 10px;
+        }
+
+        #logo:hover{
+            cursor: pointer;
         }
 
         #search-input {
@@ -46,7 +50,7 @@
         #liked-videos-button {
             padding: 10px 15px;
             font-size: 16px;
-            background-color: #6a0dad; /* Mauve */
+            background-color: #6a0dad;
             color: #ffffff;
             border: none;
             border-radius: 5px;
@@ -57,7 +61,7 @@
 
         #search-button:hover,
         #liked-videos-button:hover {
-            background-color: #8a2be2; /* Mauve clair */
+            background-color: #8a2be2;
         }
 
         #results {
@@ -68,7 +72,7 @@
         }
         .video {
             display: flex;
-            background-color: #444444; /* Gris foncé pour les résultats */
+            background-color: #444444;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 5px;
@@ -104,14 +108,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent noir */
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
         .popup-content {
             position: relative;
-            background-color: #000000; /* Fond noir pour le lecteur vidéo */
+            background-color: #000000;
             padding: 20px;
             border-radius: 5px;
             width: 90%;
@@ -121,8 +125,8 @@
             align-items: center;
         }
         .popup-content iframe {
-            width: calc(100% - 40px); /* Calcul de la largeur moins les paddings */
-            height: calc(100% - 40px); /* Calcul de la hauteur moins les paddings */
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
             border-radius: 5px;
         }
 
@@ -132,7 +136,7 @@
             right: 10px;
             padding: 10px 15px;
             font-size: 16px;
-            background-color: #6a0dad; /* Mauve */
+            background-color: #6a0dad;
             color: #ffffff;
             border: none;
             border-radius: 5px;
@@ -140,20 +144,20 @@
             font-family: 'Consolas', monospace;
         }
         .close-button:hover {
-            background-color: #8a2be2; /* Mauve clair */
+            background-color: #8a2be2;
         }
 
         .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #333333; /* Gris foncé pour les éléments d'historique */
+            background-color: #333333;
             padding: 5px;
             border-radius: 5px;
             margin-bottom: 5px;
         }
         .delete-button {
-            background-color: #ff0000; /* Rouge */
+            background-color: #ff0000;
             color: #ffffff;
             border: none;
             border-radius: 5px;
@@ -162,7 +166,7 @@
             font-family: 'Consolas', monospace;
         }
         .delete-button:hover {
-            background-color: #ff4d4d; /* Rouge clair */
+            background-color: #ff4d4d;
         }
 
         #home-section {
@@ -185,7 +189,7 @@
 
         .like-button,
         .unlike-button {
-            background-color: #ff4500; /* Orange pour le bouton like */
+            background-color: #ff4500;
             color: #ffffff;
             border: none;
             border-radius: 5px;
@@ -205,7 +209,7 @@
         }
 
         .unlike-button:hover {
-            background-color: #ff6347; /* Rouge clair */
+            background-color: #ff6347;
                 transition: 0.3s;
         }
 
@@ -216,7 +220,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -224,47 +228,47 @@
 
         .popup-content-settings {
             position: relative;
-            background-color: #333333; /* Dark gray background */
+            background-color: #333333;
             padding: 20px;
             border-radius: 10px;
             width: 50%;
             max-width: 400px;
             text-align: center;
             display: flex;
-            flex-direction: column; /* Affichage des options de haut en bas */
-            justify-content: flex-start; /* Alignement en haut */
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
         }
 
         .popup-content-settings h2 {
-            color: #ffffff; /* White text color */
+            color: #ffffff;
             margin-bottom: 20px;
-            align-self: flex-start; /* Alignement à gauche */
+            align-self: flex-start;
         }
 
         .popup-content-settings label {
-            color: #ffffff; /* White text color */
+            color: #ffffff;
             display: block;
             text-align: left;
             margin-bottom: 10px;
-            width: 100%; /* Pleine largeur pour le label */
+            width: 100%;
         }
 
         .popup-content-settings button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6a0dad; /* Purple */
-            color: #ffffff; /* White text color */
+            background-color: #6a0dad;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-family: 'Consolas', monospace;
             margin-top: 10px;
-            width: 100%; /* Pleine largeur pour le bouton */
+            width: 100%;
         }
 
         .popup-content-settings button:hover {
-            background-color: #8a2be2; /* Light purple */
+            background-color: #8a2be2;
         }
 
         #discord-rpc-checkbox {
@@ -322,6 +326,7 @@
     <script>
     document.addEventListener("DOMContentLoaded", () => {
 
+        const homeButton = document.getElementById("logo")
         const searchButton = document.getElementById('search-button');
         const likedVideosButton = document.getElementById('liked-videos-button');
         const settingsButton = document.getElementById('settings-button');
@@ -332,6 +337,7 @@
         const closeSettingsButton = document.getElementById('close-settings-button');
         const discordRpcCheckbox = document.getElementById('discord-rpc-checkbox');
 
+        homeButton.addEventListener("click", displayHome)
         searchButton.addEventListener('click', getResults);
         likedVideosButton.addEventListener('click', getLikedVideos);
         settingsButton.addEventListener('click', openSettingsPanel);
@@ -414,10 +420,18 @@
             });
         }
 
+        function displayHome() {
+            const homeSection = document.getElementById('home-section');
+            homeSection.style.display = '';
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.style.display = 'none';
+        }
+
         function displayResults(results) {
             const homeSection = document.getElementById('home-section');
             homeSection.style.display = 'none';
             const resultsContainer = document.getElementById('results');
+            resultsContainer.style.display = "";
             resultsContainer.innerHTML = '';
             results.forEach(video => {
                 try {

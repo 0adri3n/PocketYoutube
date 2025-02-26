@@ -8,7 +8,6 @@ const yaml = require("js-yaml");
 
 let win;
 
-// Window definition
 function createWindow() {
   win = new BrowserWindow({
     width: 800,
@@ -35,7 +34,6 @@ function createWindow() {
   });
 }
 
-// Api Part
 ipcMain.handle("get-results", async (event, search) => {
   console.log("API called 🤖 | Route : get-results");
   const { videos } = await youtube.search(search);
@@ -211,16 +209,12 @@ ipcMain.on("switch-rpc", async (event, newValue) => {
   const configFile = path.join(__dirname, "config/config.yaml");
 
   try {
-    // Charger le contenu du fichier config.yaml
     const config = yaml.load(fs.readFileSync(configFile, "utf8"));
 
-    // Inverser la valeur de discord-rpc
     config["discord-rpc"] = !config["discord-rpc"];
 
-    // Écrire les modifications dans le fichier config.yaml
     fs.writeFileSync(configFile, yaml.dump(config));
 
-    // Retourner la nouvelle valeur de discord-rpc
     return config["discord-rpc"];
   } catch (error) {
     console.error("Error reading or writing config.yaml:", error);
@@ -243,7 +237,7 @@ ipcMain.on("delete-like", async (event, videoId) => {
         return video.id !== videoId;
       } catch (error) {
         console.error("Error parsing line:", item, error);
-        return true; // Si une ligne ne peut pas être analysée, nous ne la supprimons pas
+        return true;
       }
     });
 
@@ -339,7 +333,6 @@ async function setActivity(videoTitle) {
 }
 
 
-// Window Part
 app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
