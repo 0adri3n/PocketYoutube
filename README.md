@@ -86,10 +86,10 @@ Technologies used in the project:
 
 <h2>🐞 Common bug :</h2>
 
-## Discord RPC
-
-*If Discord RPC isn't showing up, try to restart Discord !*
-
+- Discord RPC :
+```
+If Discord RPC isn't showing up, try to restart Discord !
+```
 
 <h2>🛡️ License:</h2>
 
