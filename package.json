@@ -18,6 +18,7 @@
     "files": [
       "interface/**/*",
       "assets/**/*",
+      "config/**/*",
       "api/**/*",
       "cache/**/*",
       "index.js",
