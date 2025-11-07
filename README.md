@@ -37,10 +37,6 @@ Here're some of the project's best features:
 *   Settings Window
 *   Not claiming 100% of your ressources
 
-Here're some of the project's <i>worst</i> features:
-
-*   Can't play videos under copyright 😿
-
 <h2>🛠️ Installation Steps:</h2>
 
 <p>You can <a href="https://github.com/0adri3n/PocketYoutube/releases">download</a> a portable version to avoid downloading Node.js :)</p
