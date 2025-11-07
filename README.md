@@ -64,6 +64,13 @@ npm start
 
 <p>4. That's it !</p>
 
+<p><b>Really insecure ? Build it by yourself :</b></p>
+
+```
+npm run dist
+```
+
+
 <h2>🐧 Oh, you're using Linux ? Gotchu :</h2>
 
 PocketYoutube is avalaible on the snap store.
