@@ -1,6 +1,6 @@
 <h1 align="center" id="title">PocketYoutube</h1>
 
-<p align="center"><img src="https://github.com/0adri3n/PocketYoutube/blob/main/assets/pocket.png" alt="project-image" width="200"></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/6af96467-4161-4e90-9513-d44acb676632" alt="project-image" width="200"></p>
 
 <p id="description">A minimalist YouTube Navigator</p>
 
