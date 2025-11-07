@@ -1,12 +1,33 @@
 {
   "name": "pocketyoutube",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A minimalist YouTube navigator",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
     "dist-linux": "electron-builder --linux snap",
     "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.pocketyoutube.app",
+    "productName": "PocketYouTube",
+    "asar": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "interface/**/*",
+      "assets/**/*",
+      "api/**/*",
+      "cache/**/*",
+      "index.js",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/pocket.ico",
+      "artifactName": "PocketYouTube-${version}-portable.exe"
+    }
   },
   "keywords": [
     "Youtube",

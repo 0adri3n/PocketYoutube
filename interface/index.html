@@ -446,13 +446,12 @@
                 window.ipcRender.invoke("check-like", video).then(isLiked => {
                     const buttonType = isLiked ? 'Unlike' : 'Like';
                     const buttonClass = isLiked ? 'unlike-button' : 'like-button';
-
+                    console.log(video)
                     videoElement.innerHTML = `
                         <img src="${video.thumbnail}" alt="${video.title}">
                         <div class="video-content">
                             <h3>${video.title}</h3>
                             <p>${video.description}</p>
-                            <p style="font-size: 12px">Duration : ${video.durationString}</p>
                             <p>
                                 <a href="#" class="watch-link" data-video-id="${video.id}" data-video-title="${video.title}">Watch on PocketYoutube</a>
                                 <button class="${buttonClass}" data-video-id="${video.id}" data-video-title="${video.title}" data-video-thumbnail="${video.thumbnail}" data-video-desc="${video.description}">${buttonType}</button>
