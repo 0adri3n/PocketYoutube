@@ -452,9 +452,10 @@
                         <div class="video-content">
                             <h3>${video.title}</h3>
                             <p>${video.description}</p>
+                            <p style="font-size: 12px">Duration : ${video.durationString}</p>
                             <p>
                                 <a href="#" class="watch-link" data-video-id="${video.id}" data-video-title="${video.title}">Watch on PocketYoutube</a>
-                                <button class="${buttonClass}" data-video-id="${video.id}" data-video-title="${video.title}" data-video-thumbnail="${video.thumbnail}" data-video-desc="${video.description}">${buttonType}</button>
+                                <button class="${buttonClass}" data-video-id="${video.id}" data-video-title="${video.title}" data-video-thumbnail="${video.thumbnail}" data-video-desc="${video.description}" data-video-durationString="${video.durationString}">${buttonType}</button>
                             </p>
                         </div>
                     `;
@@ -514,7 +515,8 @@
             const videoTitle = this.getAttribute('data-video-title');
             const videoThumbnail = this.getAttribute('data-video-thumbnail');
             const videoDesc = this.getAttribute('data-video-desc');
-            window.ipcRender.send("like-video", { id: videoId, title: videoTitle, thumbnail: videoThumbnail, description: videoDesc });
+            const videoDurationString = this.getAttribute('data-video-durationString');
+            window.ipcRender.send("like-video", { id: videoId, title: videoTitle, thumbnail: videoThumbnail, description: videoDesc, durationString:  videoDurationString});
             this.textContent = 'Unlike';
             this.classList.remove('like-button');
             this.classList.add('unlike-button');

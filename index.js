@@ -51,6 +51,7 @@ function createWindow() {
 ipcMain.handle("get-results", async (event, search) => {
   console.log("API called 🤖 | Route : get-results");
   const { videos } = await youtube.search(search);
+  console.log(videos);
   return videos;
 });
 
@@ -190,8 +191,8 @@ ipcMain.handle("check-like", async (event, video) => {
     console.error("Error reading liked_videos.log:", error);
   }
 
-  const { id, title, thumbnail, description } = video;
-  const videoData = JSON.stringify({ id, title, thumbnail, description });
+  const { id, title, thumbnail, description, durationString } = video;
+  const videoData = JSON.stringify({ id, title, thumbnail, description, durationString });
 
   if (!likedVideosList.includes(videoData)) {
     return false;
