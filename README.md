@@ -81,6 +81,13 @@ Technologies used in the project:
 *   Electron
 *   YouTube iframe
 
+<h2>🐞 Common bug :</h2>
+
+## Discord RPC
+
+*If Discord RPC isn't showing up, try to restart Discord !*
+
+
 <h2>🛡️ License:</h2>
 
 This project is licensed under the MIT

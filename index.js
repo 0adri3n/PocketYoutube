@@ -288,18 +288,17 @@ ipcMain.on("change-rpc", async (event, videoTitle) => {
 });
 
 const clientId = "1258172335282851933";
-
-const rpc = new DiscordRPC.Client({ transport: "ipc" });
 DiscordRPC.register(clientId);
+const rpc = new DiscordRPC.Client({ transport: "ipc" });
 
 const startTimestamp = new Date();
 
 const configFile = path.join(__dirname, "config/config.yaml");
 
 
+
 try {
   const config = yaml.load(fs.readFileSync(configFile, "utf8"));
-
   var discordRpcEnabled = config["discord-rpc"] === true;
 
 } catch (error) {
@@ -307,8 +306,6 @@ try {
   var discordRpcEnabled = false;
 }
 if(discordRpcEnabled){
-
-
 
   rpc.on("ready", () => {
     setActivity("reset");
