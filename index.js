@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
+const express = require("express");
 const { youtube } = require("scrape-youtube");
 const path = require("path");
 const url = require("url");
@@ -8,31 +9,44 @@ const yaml = require("js-yaml");
 
 let win;
 
+
 function createWindow() {
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, "api/preload.js"),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-    icon: path.join(__dirname, "assets/pocket.png"),
-    autoHideMenuBar: true,
-  });
+  const server = express();
+  server.use(express.static(path.join(__dirname, "interface")));
 
-  win.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "interface/index.html"),
-      protocol: "file",
-      slashes: true,
-    })
-  );
+  server.use('/assets', express.static(path.join(__dirname, 'assets')));
+  server.use(express.static(path.join(__dirname, 'interface')));
 
-  win.on("closed", () => {
-    win = null;
+  const listener = server.listen(0, () => {
+    const port = listener.address().port;
+
+    win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, "api/preload.js"),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: true,
+        autoplayPolicy: "no-user-gesture-required",
+      },
+      icon: path.join(__dirname, "assets/pocket.png"),
+      autoHideMenuBar: true,
+    });
+
+    win.webContents.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+    );
+
+    win.loadURL(`http://localhost:${port}/index.html`);
+
+    win.on("closed", () => {
+      win = null;
+      listener.close();
+    });
   });
 }
+
 
 ipcMain.handle("get-results", async (event, search) => {
   console.log("API called 🤖 | Route : get-results");

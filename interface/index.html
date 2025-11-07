@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PocketYoutube</title>
+    <meta name="referrer" content="origin" />
     <style>
         body {
             font-family: 'Consolas', monospace;            
@@ -282,7 +283,7 @@
 </head>
 <body>
     <div id="search-bar">
-        <img src="../assets/pocket.png" alt="PocketYoutube Logo" id="logo">
+        <img src="/assets/pocket.png" alt="PocketYoutube Logo" id="logo">
         <input type="text" id="search-input" placeholder="Search YouTube videos..." list="history-list">
         <datalist id="history-list">
         </datalist>
@@ -312,14 +313,14 @@
 
 
     <div id="home-section">
-        <img src="../assets/pocket.png" alt="PocketYoutube Logo">
+        <img src="/assets/pocket.png" alt="PocketYoutube Logo">
         <h1>Welcome to PocketYoutube</h1>
     </div>
 
     <div id="results"></div>
     <div class="popup-container" id="popup-container">
         <div class="popup-content" id="popup-content">
-            <iframe id="popup-player" frameborder="0" allowfullscreen></iframe>
+            <iframe id="popup-player" frameborder="0" allow="autoplay; encrypted-media; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <button class="close-button" id="close-button">Close</button>
         </div>
     </div>
@@ -488,7 +489,7 @@
         function openPopup(videoId) {
             const popupContainer = document.getElementById('popup-container');
             const popupPlayer = document.getElementById('popup-player');
-            popupPlayer.src = `https://www.youtube.com/embed/${videoId}`;
+            popupPlayer.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
             popupContainer.style.display = 'flex';
             window.ipcRender.send("change-rpc", videoId);
         }

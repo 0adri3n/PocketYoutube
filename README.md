@@ -49,13 +49,20 @@ Here're some of the project's <i>worst</i> features:
 
 <p>1. Download the repository</p>
 
-<p>2. Start it with npm</p>
+<p>2. Download Node packages</p>
+
+```
+npm install
+```
+
+
+<p>3. Start it with npm</p>
 
 ```
 npm start
 ```
 
-<p>3. That's it !</p>
+<p>4. That's it !</p>
 
 <h2>🐧 Oh, you're using Linux ? Gotchu :</h2>
 
